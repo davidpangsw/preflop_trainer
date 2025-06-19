@@ -32,15 +32,18 @@ class MyHomePage extends StatelessWidget {
           // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
           // action in the IDE, or press "p" in the console), to see the
           // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CardWidget(card: appState.cards[0]),
-                CardWidget(card: appState.cards[1]),
+                CardWidget(card: appState.hand[0]),
+                CardWidget(card: appState.hand[1]),
               ],
             ),
+            ElevatedButton(onPressed: () {
+              appState.nextHand();
+            }, child: Text('Next Hand')),
           ],
         ),
       ),

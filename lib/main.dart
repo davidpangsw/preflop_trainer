@@ -27,5 +27,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  var cards = models.Card.random(2);
+  var hand = models.Card.random(2);
+
+  void nextHand() {
+    hand = models.Card.random(2);
+    notifyListeners();
+  }
 }
