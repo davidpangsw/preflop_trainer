@@ -2,6 +2,19 @@ import 'dart:math';
 
 enum Suit { clubs, diamonds, hearts, spades }
 
+extension SuitExtension on Suit {
+  static const _toPokerValueMap = {
+    Suit.clubs: 1,
+    Suit.diamonds: 2,
+    Suit.hearts: 3,
+    Suit.spades: 4,
+  };
+
+  int toPokerValue() {
+    return _toPokerValueMap[this]!;
+  }
+}
+
 enum Rank {
   ace,
   two,
@@ -18,9 +31,93 @@ enum Rank {
   king,
 }
 
+extension RankExtension on Rank {
+  static const _toSymbolMap = {
+    Rank.ace: 'A',
+    Rank.two: '2',
+    Rank.three: '3',
+    Rank.four: '4',
+    Rank.five: '5',
+    Rank.six: '6',
+    Rank.seven: '7',
+    Rank.eight: '8',
+    Rank.nine: '9',
+    Rank.ten: 'T',
+    Rank.jack: 'J',
+    Rank.queen: 'Q',
+    Rank.king: 'K',
+  };
+
+  static const _fromSymbolMap = {
+    'A': Rank.ace,
+    '2': Rank.two,
+    '3': Rank.three,
+    '4': Rank.four,
+    '5': Rank.five,
+    '6': Rank.six,
+    '7': Rank.seven,
+    '8': Rank.eight,
+    '9': Rank.nine,
+    'T': Rank.ten,
+    'J': Rank.jack,
+    'Q': Rank.queen,
+    'K': Rank.king,
+  };
+
+  static const _toPokerValueMap = {
+    Rank.ace: 14,
+    Rank.two: 2,
+    Rank.three: 3,
+    Rank.four: 4,
+    Rank.five: 5,
+    Rank.six: 6,
+    Rank.seven: 7,
+    Rank.eight: 8,
+    Rank.nine: 9,
+    Rank.ten: 10,
+    Rank.jack: 11,
+    Rank.queen: 12,
+    Rank.king: 13,
+  };
+
+  static const _fromPokerValueMap = {
+    14: Rank.ace,
+    2: Rank.two,
+    3: Rank.three,
+    4: Rank.four,
+    5: Rank.five,
+    6: Rank.six,
+    7: Rank.seven,
+    8: Rank.eight,
+    9: Rank.nine,
+    10: Rank.ten,
+    11: Rank.jack,
+    12: Rank.queen,
+    13: Rank.king,
+  };
+
+  static Rank parse(String symbol) {
+    return _fromSymbolMap[symbol] ??
+        (throw FormatException('Invalid rank: $symbol'));
+  }
+
+  static Rank ofPokerValue(int i) {
+    return _fromPokerValueMap[i] ??
+        (throw FormatException('Invalid poker value: $i'));
+  }
+
+  String toSymbol() {
+    return _toSymbolMap[this]!;
+  }
+
+  int toPokerValue() {
+    return _toPokerValueMap[this]!;
+  }
+}
+
 // A playing card with a [suit] and [rank]. All cards are singletons, so
 /// cards with the same suit and rank are identical.
-class Card {
+class Card implements Comparable<Card> {
   final Suit suit;
   final Rank rank;
 
@@ -67,46 +164,13 @@ class Card {
       );
     }
 
-    final rank = _parseRank(input[0]);
-    final suit = _parseSuit(input[1]);
+    final rank = RankExtension.parse(input[0]);
+    final suit = parseSuit(input[1]);
 
     return of(rank, suit);
   }
 
-  static Rank _parseRank(String char) {
-    switch (char) {
-      case 'A':
-        return Rank.ace;
-      case '2':
-        return Rank.two;
-      case '3':
-        return Rank.three;
-      case '4':
-        return Rank.four;
-      case '5':
-        return Rank.five;
-      case '6':
-        return Rank.six;
-      case '7':
-        return Rank.seven;
-      case '8':
-        return Rank.eight;
-      case '9':
-        return Rank.nine;
-      case 'T':
-        return Rank.ten;
-      case 'J':
-        return Rank.jack;
-      case 'Q':
-        return Rank.queen;
-      case 'K':
-        return Rank.king;
-      default:
-        throw FormatException('Invalid rank: $char');
-    }
-  }
-
-  static Suit _parseSuit(String char) {
+  static Suit parseSuit(String char) {
     switch (char) {
       case 's':
         return Suit.spades;
@@ -135,6 +199,18 @@ class Card {
   // Assume Cards are all singletons (i.e., no two cards have the same suit and rank)
   @override
   bool operator ==(Object other) => identical(this, other);
+
+  @override
+  int compareTo(Card other) {
+    // print('Comparing ${this} to ${other}...');
+    var result = rank.toPokerValue().compareTo(other.rank.toPokerValue());
+    if (result != 0) {
+      return result;
+    }
+
+    return suit.toPokerValue().compareTo(other.suit.toPokerValue());
+  }
+
   @override
   int get hashCode => Object.hash(suit, rank);
 }
