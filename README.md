@@ -1,6 +1,16 @@
 # preflop_trainer
 
-A new Flutter project.
+A Flutter project for Poker Preflop training
+
+## Roadmap
+- No feature creep: Only preflop training is enough. Only implement the game setting I am playing for now.
+
+- Day 1:
+    - Randomly draw and Visualize game state
+    - Setting up Flashcards and Algorithm (SM2)
+    - Import all OPEN answers
+    - Host on vercel.app
+
 
 ## Getting Started
 
