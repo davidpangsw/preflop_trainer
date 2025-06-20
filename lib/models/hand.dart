@@ -5,12 +5,13 @@ class Hand {
   final Card card2;
 
   Hand(Card c1, Card c2)
-      : assert(c1 != c2, 'A hand cannot contain two identical cards.'),
-        card1 = c1.compareTo(c2) < 0 ? c1 : c2, // Assigns the 'smaller' card
-        card2 = c1.compareTo(c2) < 0 ? c2 : c1; // Assigns the 'larger' card
+    : assert(c1 != c2, 'A hand cannot contain two identical cards.'),
+      card1 = c1.compareTo(c2) < 0 ? c1 : c2, // Assigns the 'smaller' card
+      card2 = c1.compareTo(c2) < 0 ? c2 : c1; // Assigns the 'larger' card
 
   @override
   String toString() => '[$card1, $card2]';
+  String toSymbol() => '${card1.toSymbol()}${card2.toSymbol()}';
 
   @override
   bool operator ==(Object other) =>
@@ -22,7 +23,7 @@ class Hand {
 
   bool get isSuited => card1.suit == card2.suit;
   bool get isPair => card1.rank == card2.rank;
-  
+
   /// Generates all 1326 possible two-card starting hands.
   /// Each hand is unique based on the specific cards (e.g., [As, Kd] is distinct).
   ///
@@ -39,5 +40,10 @@ class Hand {
       }
     }
     return allHands;
+  }
+
+  static Hand random() {
+    var cards = Card.random(2);
+    return Hand(cards[0], cards[1]);
   }
 }

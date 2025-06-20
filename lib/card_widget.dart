@@ -85,31 +85,7 @@ class CardWidget extends StatelessWidget {
     );
   }
 
-  String _rankSymbol(models.Rank rank) => switch (rank) {
-        models.Rank.ace => 'A',
-        models.Rank.two => '2',
-        models.Rank.three => '3',
-        models.Rank.four => '4',
-        models.Rank.five => '5',
-        models.Rank.six => '6',
-        models.Rank.seven => '7',
-        models.Rank.eight => '8',
-        models.Rank.nine => '9',
-        models.Rank.ten => '10',
-        models.Rank.jack => 'J',
-        models.Rank.queen => 'Q',
-        models.Rank.king => 'K',
-      };
-
-  String _suitSymbol(models.Suit suit) => switch (suit) {
-        models.Suit.spades => '♠',
-        models.Suit.hearts => '♥',
-        models.Suit.diamonds => '♦',
-        models.Suit.clubs => '♣',
-      };
-
-  Color _suitColor(models.Suit suit) => switch (suit) {
-        models.Suit.spades || models.Suit.clubs => Colors.black,
-        models.Suit.hearts || models.Suit.diamonds => Colors.red,
-      };
+  String _rankSymbol(models.Rank rank) => rank.toDisplaySymbol();
+  String _suitSymbol(models.Suit suit) => suit.toDisplaySymbol();
+  Color _suitColor(models.Suit suit) => suit.toDisplayColor();
 }

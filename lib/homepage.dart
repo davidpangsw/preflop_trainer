@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:preflop_trainer/card_widget.dart';
-import 'package:preflop_trainer/hand_chart.dart';
+import 'package:preflop_trainer/poker_state_widget.dart';
 import 'package:preflop_trainer/main.dart';
-import 'package:preflop_trainer/models/card.dart' as models;
 import 'package:provider/provider.dart';
 
 class MyHomePage extends StatelessWidget {
@@ -12,7 +10,6 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    appState.hand.sort();
 
     return Scaffold(
       // appBar: AppBar(
@@ -36,13 +33,7 @@ class MyHomePage extends StatelessWidget {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                CardWidget(card: appState.hand[1]),
-                CardWidget(card: appState.hand[0]),
-              ],
-            ),
+            PokerStateWidget(),
             ElevatedButton(onPressed: () {
               appState.nextHand();
             }, child: Text('Next Hand')),

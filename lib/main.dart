@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:preflop_trainer/homepage.dart';
 import 'package:preflop_trainer/models/card.dart' as models;
+import 'package:preflop_trainer/models/hand.dart';
 import 'package:provider/provider.dart';
 
 void main() {
@@ -27,10 +28,44 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  List<models.Card> hand = models.Card.random(2);
+  PokerState pokerState = PokerState(
+    position: PokerPosition.utg,
+    action: PokerAction.open,
+    hand: Hand.random(),
+  );
 
   void nextHand() {
-    hand = models.Card.random(2);
+    pokerState = PokerState(
+      position: PokerPosition.utg,
+      action: PokerAction.open,
+      hand: Hand.random(),
+    );
     notifyListeners();
   }
 }
+
+class PokerState {
+  PokerPosition position;
+  PokerAction action;
+  Hand hand;
+
+  PokerState({
+    required this.position,
+    required this.action,
+    required this.hand,
+  });
+}
+
+enum PokerPosition {
+  utg,
+  utg1, // >= 9
+  utg2, // >= 8
+  lj, // >= 7
+  hj,
+  co,
+  btn,
+  sb,
+  bb,
+}
+
+enum PokerAction { open, threebet, fourbet }

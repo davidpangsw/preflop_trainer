@@ -1,18 +1,35 @@
 import 'dart:math';
 
+import 'package:flutter/material.dart';
+
 enum Suit { clubs, diamonds, hearts, spades }
 
 extension SuitExtension on Suit {
-  static const _toPokerValueMap = {
-    Suit.clubs: 1,
-    Suit.diamonds: 2,
-    Suit.hearts: 3,
-    Suit.spades: 4,
+  int toPokerValue() => switch (this) {
+    Suit.clubs => 1,
+    Suit.diamonds => 2,
+    Suit.hearts => 3,
+    Suit.spades => 4,
   };
 
-  int toPokerValue() {
-    return _toPokerValueMap[this]!;
-  }
+  String toSymbol() => switch (this) {
+    Suit.clubs => 'c',
+    Suit.diamonds => 'd',
+    Suit.hearts => 'h',
+    Suit.spades => 's',
+  };
+
+  String toDisplaySymbol() => switch (this) {
+    Suit.clubs => '♣',
+    Suit.diamonds => '♦',
+    Suit.hearts => '♥',
+    Suit.spades => '♠',
+  };
+
+  Color toDisplayColor() => switch (this) {
+    Suit.clubs || Suit.spades => Colors.black,
+    Suit.diamonds || Suit.hearts => Colors.red,
+  };
 }
 
 enum Rank {
@@ -32,87 +49,87 @@ enum Rank {
 }
 
 extension RankExtension on Rank {
-  static const _toSymbolMap = {
-    Rank.ace: 'A',
-    Rank.two: '2',
-    Rank.three: '3',
-    Rank.four: '4',
-    Rank.five: '5',
-    Rank.six: '6',
-    Rank.seven: '7',
-    Rank.eight: '8',
-    Rank.nine: '9',
-    Rank.ten: 'T',
-    Rank.jack: 'J',
-    Rank.queen: 'Q',
-    Rank.king: 'K',
+  String toSymbol() => switch (this) {
+    Rank.ace => 'A',
+    Rank.two => '2',
+    Rank.three => '3',
+    Rank.four => '4',
+    Rank.five => '5',
+    Rank.six => '6',
+    Rank.seven => '7',
+    Rank.eight => '8',
+    Rank.nine => '9',
+    Rank.ten => 'T',
+    Rank.jack => 'J',
+    Rank.queen => 'Q',
+    Rank.king => 'K',
   };
 
-  static const _fromSymbolMap = {
-    'A': Rank.ace,
-    '2': Rank.two,
-    '3': Rank.three,
-    '4': Rank.four,
-    '5': Rank.five,
-    '6': Rank.six,
-    '7': Rank.seven,
-    '8': Rank.eight,
-    '9': Rank.nine,
-    'T': Rank.ten,
-    'J': Rank.jack,
-    'Q': Rank.queen,
-    'K': Rank.king,
+  int toPokerValue() => switch (this) {
+    Rank.ace => 14,
+    Rank.two => 2,
+    Rank.three => 3,
+    Rank.four => 4,
+    Rank.five => 5,
+    Rank.six => 6,
+    Rank.seven => 7,
+    Rank.eight => 8,
+    Rank.nine => 9,
+    Rank.ten => 10,
+    Rank.jack => 11,
+    Rank.queen => 12,
+    Rank.king => 13,
   };
 
-  static const _toPokerValueMap = {
-    Rank.ace: 14,
-    Rank.two: 2,
-    Rank.three: 3,
-    Rank.four: 4,
-    Rank.five: 5,
-    Rank.six: 6,
-    Rank.seven: 7,
-    Rank.eight: 8,
-    Rank.nine: 9,
-    Rank.ten: 10,
-    Rank.jack: 11,
-    Rank.queen: 12,
-    Rank.king: 13,
+  String toDisplaySymbol() => switch (this) {
+    Rank.ace => 'A',
+    Rank.two => '2',
+    Rank.three => '3',
+    Rank.four => '4',
+    Rank.five => '5',
+    Rank.six => '6',
+    Rank.seven => '7',
+    Rank.eight => '8',
+    Rank.nine => '9',
+    Rank.ten => '10',
+    Rank.jack => 'J',
+    Rank.queen => 'Q',
+    Rank.king => 'K',
   };
 
-  static const _fromPokerValueMap = {
-    14: Rank.ace,
-    2: Rank.two,
-    3: Rank.three,
-    4: Rank.four,
-    5: Rank.five,
-    6: Rank.six,
-    7: Rank.seven,
-    8: Rank.eight,
-    9: Rank.nine,
-    10: Rank.ten,
-    11: Rank.jack,
-    12: Rank.queen,
-    13: Rank.king,
+  static Rank ofSymbol(String symbol) => switch (symbol) {
+    'A' => Rank.ace,
+    '2' => Rank.two,
+    '3' => Rank.three,
+    '4' => Rank.four,
+    '5' => Rank.five,
+    '6' => Rank.six,
+    '7' => Rank.seven,
+    '8' => Rank.eight,
+    '9' => Rank.nine,
+    'T' => Rank.ten,
+    'J' => Rank.jack,
+    'Q' => Rank.queen,
+    'K' => Rank.king,
+    _ => throw FormatException('Invalid rank: $symbol'),
   };
 
-  static Rank parse(String symbol) {
-    return _fromSymbolMap[symbol] ??
-        (throw FormatException('Invalid rank: $symbol'));
-  }
-
-  static Rank ofPokerValue(int i) {
-    return _fromPokerValueMap[i] ??
-        (throw FormatException('Invalid poker value: $i'));
-  }
-
-  String toSymbol() {
-    return _toSymbolMap[this]!;
-  }
-
-  int toPokerValue() {
-    return _toPokerValueMap[this]!;
-  }
+  static Rank ofPokerValue(int i) => switch (i) {
+    14 => Rank.ace,
+    2 => Rank.two,
+    3 => Rank.three,
+    4 => Rank.four,
+    5 => Rank.five,
+    6 => Rank.six,
+    7 => Rank.seven,
+    8 => Rank.eight,
+    9 => Rank.nine,
+    10 => Rank.ten,
+    11 => Rank.jack,
+    12 => Rank.queen,
+    13 => Rank.king,
+    _ => throw FormatException('Invalid poker value: $i'),
+  };
 }
 
 // A playing card with a [suit] and [rank]. All cards are singletons, so
@@ -164,7 +181,7 @@ class Card implements Comparable<Card> {
       );
     }
 
-    final rank = RankExtension.parse(input[0]);
+    final rank = RankExtension.ofSymbol(input[0]);
     final suit = parseSuit(input[1]);
 
     return of(rank, suit);
@@ -188,6 +205,10 @@ class Card implements Comparable<Card> {
   @override
   String toString() {
     return '${rank.name} of ${suit.name}';
+  }
+
+  String toSymbol() {
+    return '${rank.toSymbol()}${suit.toSymbol()}';
   }
 
   // @override
