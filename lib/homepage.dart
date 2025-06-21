@@ -33,7 +33,6 @@ class MyHomePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             FlashcardWidget(),
-
             // HandChart(),
           ],
         ),

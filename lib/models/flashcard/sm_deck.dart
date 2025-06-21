@@ -56,6 +56,19 @@ class SmDeck {
     return responses[cardId]!;
   }
 
+  String toMyJson(int size) {
+    final values = {
+      for (var key in reviewQueue.toList().sublist(0, size))
+        key: {
+          'interval': responses[key]!.interval,
+          'repetitions': responses[key]!.repetitions,
+          'easeFactor': responses[key]!.easeFactor,
+        },
+    };
+
+    return jsonEncode(values);
+  }
+
   String toJson() {
     final Map<String, dynamic> jsonMap = {
       'id': id,

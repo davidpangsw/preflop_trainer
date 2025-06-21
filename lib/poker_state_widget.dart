@@ -5,11 +5,15 @@ import 'package:preflop_trainer/models/poker/poker_state.dart';
 import 'package:provider/provider.dart';
 
 class PokerStateWidget extends StatelessWidget {
-  final PokerState pokerState;
-  const PokerStateWidget({super.key, required this.pokerState});
-
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<MyAppState>();
+    final pokerState = appState.pokerState;
+
+    if (pokerState == null) {
+      return Text('');
+    }
+
     var hand = pokerState.hand;
 
     return Column(
