@@ -56,17 +56,15 @@ class SmDeck {
     return responses[cardId]!;
   }
 
-  String toMyJson(int size) {
-    final values = {
-      for (var key in reviewQueue.toList().sublist(0, size))
-        key: {
-          'interval': responses[key]!.interval,
-          'repetitions': responses[key]!.repetitions,
-          'easeFactor': responses[key]!.easeFactor,
-        },
-    };
+  List<String> top(int size) {
+    return reviewQueue.toList().sublist(0, size);
+  }
 
-    return jsonEncode(values);
+  List<MapEntry<String, SmResponse>> topEntries(int size) {
+    return [
+      for (var key in top(size))
+        MapEntry(key, responses[key]!)
+    ];
   }
 
   String toJson() {

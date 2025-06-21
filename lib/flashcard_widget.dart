@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_json_view/flutter_json_view.dart';
 import 'package:preflop_trainer/main.dart';
 import 'package:preflop_trainer/poker_state_widget.dart';
 import 'package:preflop_trainer/sm_deck_view.dart';
@@ -39,30 +38,30 @@ class FlashcardWidgetPanel extends StatelessWidget {
           },
           child: Text('Fold'),
         ),
-        ElevatedButton(
-          onPressed: () {
-            appState.answerPokerState(100);
-          },
-          child: Text('Call'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     appState.answerPokerState(100);
+        //   },
+        //   child: Text('Call'),
+        // ),
         ElevatedButton(
           onPressed: () {
             appState.answerPokerState(200);
           },
           child: Text('Raise 2BB'),
         ),
-        ElevatedButton(
-          onPressed: () {
-            appState.answerPokerState(250);
-          },
-          child: Text('Raise 2.5BB'),
-        ),
-        ElevatedButton(
-          onPressed: () {
-            appState.answerPokerState(300);
-          },
-          child: Text('Raise 3BB'),
-        ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     appState.answerPokerState(250);
+        //   },
+        //   child: Text('Raise 2.5BB'),
+        // ),
+        // ElevatedButton(
+        //   onPressed: () {
+        //     appState.answerPokerState(300);
+        //   },
+        //   child: Text('Raise 3BB'),
+        // ),
       ],
     );
   }
