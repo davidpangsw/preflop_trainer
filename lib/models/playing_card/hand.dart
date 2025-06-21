@@ -1,8 +1,10 @@
-import 'package:preflop_trainer/models/card.dart';
+import 'dart:math';
+
+import 'package:preflop_trainer/models/playing_card/card.dart';
 
 class Hand {
-  final Card card1;
-  final Card card2;
+  final Card card1; // smaller card
+  final Card card2; // larger card
 
   Hand(Card c1, Card c2)
     : assert(c1 != c2, 'A hand cannot contain two identical cards.'),
@@ -12,6 +14,14 @@ class Hand {
   @override
   String toString() => '[$card1, $card2]';
   String toSymbol() => '${card1.toSymbol()}${card2.toSymbol()}';
+  String toPreflopSymbol() {
+    final c = isPair
+        ? ''
+        : (isSuited)
+        ? 's'
+        : 'o';
+    return '${card2.rank.toSymbol()}${card1.rank.toSymbol()}$c';
+  }
 
   @override
   bool operator ==(Object other) =>
@@ -42,8 +52,24 @@ class Hand {
     return allHands;
   }
 
-  static Hand random() {
+  factory Hand.random() {
     var cards = Card.random(2);
     return Hand(cards[0], cards[1]);
+  }
+
+  factory Hand.randomFromPreflopSymbol(String symbol) {
+    final rank1 = RankExtension.ofSymbol(symbol[0]);
+    final rank2 = RankExtension.ofSymbol(symbol[1]);
+    final suits = Suit.values.toList()..shuffle();
+    if (rank1 == rank2) {
+      return Hand(Card.of(rank1, suits[0]), Card.of(rank2, suits[1]));
+    } else {
+      final isSuited = symbol[2] == 's';
+      if (isSuited) {
+        return Hand(Card.of(rank1, suits[0]), Card.of(rank2, suits[0]));
+      } else {
+        return Hand(Card.of(rank1, suits[0]), Card.of(rank2, suits[1]));
+      }
+    }
   }
 }

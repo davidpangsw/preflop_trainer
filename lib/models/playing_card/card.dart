@@ -130,6 +130,22 @@ extension RankExtension on Rank {
     13 => Rank.king,
     _ => throw FormatException('Invalid poker value: $i'),
   };
+
+  static List<Rank> ranksSortedByPokerValue = [
+    Rank.two,
+    Rank.three,
+    Rank.four,
+    Rank.five,
+    Rank.six,
+    Rank.seven,
+    Rank.eight,
+    Rank.nine,
+    Rank.ten,
+    Rank.jack,
+    Rank.queen,
+    Rank.king,
+    Rank.ace,
+  ];
 }
 
 // A playing card with a [suit] and [rank]. All cards are singletons, so

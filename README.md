@@ -7,8 +7,8 @@ A Flutter project for Poker Preflop training
 
 - Day 1:
     - Randomly draw and Visualize game state
-    - Setting up Flashcards and Algorithm (SM2)
     - Import all OPEN answers
+    - Setting up Flashcards and Algorithm (SM2)
     - Host on vercel.app
 
 

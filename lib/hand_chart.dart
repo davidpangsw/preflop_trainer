@@ -1,9 +1,10 @@
-import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:preflop_trainer/models/card.dart' as models;
+import 'package:preflop_trainer/main.dart';
+import 'package:preflop_trainer/models/flashcard/flashcard_deck.dart';
+import 'package:preflop_trainer/models/playing_card/card.dart' as models;
 import 'package:preflop_trainer/utils/mixed_box.dart';
+import 'package:provider/provider.dart';
 
 class HandChart extends StatefulWidget {
   const HandChart({super.key});
@@ -14,98 +15,72 @@ class HandChart extends StatefulWidget {
 
 class _HandChartState extends State<HandChart> {
   final int gridSize = 13;
-  final List<models.Rank> allRanks = models.Rank.values.reversed.toList();
+  final List<models.Rank> allRanks = models.RankExtension.ranksSortedByPokerValue.reversed.toList();
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder(
-      future: loadHandData(context),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        if (snapshot.hasError || !snapshot.hasData) {
-          print(snapshot.error.toString());
-          return const Center(child: Text('Error loading hand data'));
-        }
-        // hand -> bet (in #BB) -> percentage
-        final Map<String, Map<String, double>> data = snapshot.data!;
+    // if (snapshot.connectionState == ConnectionState.waiting) {
+    //   return const Center(child: CircularProgressIndicator());
+    // }
+    // if (snapshot.hasError || !snapshot.hasData) {
+    //   return Center(child: Text('Error loading hand data: ${snapshot.error}'));
+    // }
+    // // hand -> bet (in #BB) -> percentage
+    // final FlashcardDeck data = snapshot.data!;
 
-        return Column(
+    var appState = context.watch<MyAppState>();
+    final FlashcardDeck? data = appState.flashcardDeck;
+
+    if (appState.flashcardDeck == null) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    return Column(
+      children: [
+        // Header row
+        Row(
           children: [
-            // Header row
-            Row(
-              children: [
-                Container(width: 30), // Empty corner
-                for (var rank in allRanks)
-                  Container(
-                    width: 40,
-                    height: 30,
-                    alignment: Alignment.center,
-                    child: Text(
-                      rank.toSymbol(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-              ],
-            ),
-            // Grid
-            for (int row = 0; row < gridSize; row++)
-              Row(
-                children: [
-                  // Row label
-                  Container(
-                    width: 30,
-                    height: 40,
-                    alignment: Alignment.center,
-                    child: Text(
-                      allRanks[row].toSymbol(),
-                      style: const TextStyle(fontWeight: FontWeight.bold),
-                    ),
-                  ),
-                  // Cells
-                  for (int col = 0; col < gridSize; col++)
-                    SizedBox(
-                      width: 40,
-                      height: 40,
-                      child: getCell(row, col, data),
-                    ),
-                ],
+            Container(width: 30), // Empty corner
+            for (var rank in allRanks)
+              Container(
+                width: 40,
+                height: 30,
+                alignment: Alignment.center,
+                child: Text(
+                  rank.toSymbol(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
               ),
           ],
-        );
-      },
+        ),
+        // Grid
+        for (int row = 0; row < gridSize; row++)
+          Row(
+            children: [
+              // Row label
+              Container(
+                width: 30,
+                height: 40,
+                alignment: Alignment.center,
+                child: Text(
+                  allRanks[row].toSymbol(),
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              // Cells
+              for (int col = 0; col < gridSize; col++)
+                SizedBox(
+                  width: 40,
+                  height: 40,
+                  child: getCell(row, col, data!),
+                ),
+            ],
+          ),
+      ],
     );
-  }
-
-  Future<Map<String, Map<String, double>>> loadHandData(
-    BuildContext context,
-  ) async {
-    final String jsonString = await rootBundle.loadString(
-      'decks/open/utg.json',
-    );
-    final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-    final solutions = jsonData["solutions"] as Map<String, dynamic>?;
-    if (solutions == null) {
-      throw FormatException('Missing or null "solutions" key in JSON');
-    }
-    return solutions.map((hand, solution) {
-      final sol = solution as Map<String, dynamic>;
-      // print(hand);
-      // print(sol);
-      return MapEntry(
-        hand,
-        sol.map((action, percentage) {
-          final doubleValue = (percentage is int)
-              ? percentage.toDouble()
-              : percentage as double;
-          return MapEntry(action, doubleValue);
-        }),
-      );
-    });
   }
 
   // Get cell content for grid position
-  Widget getCell(int row, int col, Map<String, Map<String, double>> data) {
+  Widget getCell(int row, int col, FlashcardDeck data) {
     // row, col: 0 - 12
     // v1, v2: 14 - 2
     // r1, r2: A - 2
@@ -114,7 +89,7 @@ class _HandChartState extends State<HandChart> {
     String hand;
     var r1 = models.RankExtension.ofPokerValue(v1);
     var r2 = models.RankExtension.ofPokerValue(v2);
-    print("Debug!! ${r1} ${r2}");
+    // print("Debug!! ${r1} ${r2}");
     if (row < col) {
       hand = '${r1.toSymbol()}${r2.toSymbol()}s'; // Suited
     } else if (row > col) {
@@ -122,8 +97,8 @@ class _HandChartState extends State<HandChart> {
     } else {
       hand = '${r1.toSymbol()}${r2.toSymbol()}'; // Pocket pair
     }
-    print(data[hand]);
-    var handData = data[hand]!;
+    // print(data[hand]);
+    var handData = data.solutions[hand]!;
     var actions = {"2", "0"};
     var percentages = actions.map((action) => handData[action] ?? 0).toList();
 

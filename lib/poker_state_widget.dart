@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:preflop_trainer/card_widget.dart';
 import 'package:preflop_trainer/main.dart';
+import 'package:preflop_trainer/models/poker/poker_state.dart';
 import 'package:provider/provider.dart';
 
 class PokerStateWidget extends StatelessWidget {
+  final PokerState pokerState;
+  const PokerStateWidget({super.key, required this.pokerState});
+
   @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
-    var hand = appState.pokerState.hand;
+    var hand = pokerState.hand;
 
     return Column(
       children: [
-        Text(appState.pokerState.position.name.toUpperCase()),
-        Text(appState.pokerState.action.name.toUpperCase()),
+        Text(pokerState.position.name.toUpperCase()),
+        Text(pokerState.action.name.toUpperCase()),
         Text(''),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,

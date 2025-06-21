@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:preflop_trainer/poker_state_widget.dart';
+import 'package:preflop_trainer/flashcard_widget.dart';
 import 'package:preflop_trainer/main.dart';
 import 'package:provider/provider.dart';
 
@@ -10,7 +10,6 @@ class MyHomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-
     return Scaffold(
       // appBar: AppBar(
       //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
@@ -33,10 +32,8 @@ class MyHomePage extends StatelessWidget {
           // wireframe for each widget.
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            PokerStateWidget(),
-            ElevatedButton(onPressed: () {
-              appState.nextHand();
-            }, child: Text('Next Hand')),
+            FlashcardWidget(),
+
             // HandChart(),
           ],
         ),

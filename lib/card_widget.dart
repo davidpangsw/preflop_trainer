@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:preflop_trainer/models/card.dart' as models;
+import 'package:preflop_trainer/models/playing_card/card.dart' as models;
 
 class CardWidget extends StatelessWidget {
   final models.Card card;
