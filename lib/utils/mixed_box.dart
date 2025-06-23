@@ -4,8 +4,7 @@ class MixedBox extends StatelessWidget {
   final List<double> percentages;
   final List<Color> colors;
 
-  const MixedBox({Key? key, required this.percentages, required this.colors})
-    : super(key: key);
+  const MixedBox({super.key, required this.percentages, required this.colors});
 
   @override
   Widget build(BuildContext context) {
