@@ -43,3 +43,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+
+# Firebase specific files and directories
+.firebase/
+firebase-debug.log
+# Sensitive files (if applicable, adjust filename)
+# firebase-secrets.json 
