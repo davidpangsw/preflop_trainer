@@ -36,7 +36,7 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   json_annotation: ^4.9.0
-  spaced_repetition: ^0.1.0
+  # spaced_repetition: ^0.1.0 # the sm algorithm here is a bit wrong?
   collection: ^1.19.1
   flutter_json_view: ^1.1.5
 

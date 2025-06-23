@@ -1,9 +1,9 @@
 
 import 'package:flutter/material.dart';
+import 'package:preflop_trainer/action_box.dart';
 import 'package:preflop_trainer/main.dart';
 import 'package:preflop_trainer/models/flashcard/flashcard_deck.dart';
 import 'package:preflop_trainer/models/playing_card/card.dart' as models;
-import 'package:preflop_trainer/utils/mixed_box.dart';
 import 'package:provider/provider.dart';
 
 class HandChart extends StatefulWidget {
@@ -98,13 +98,10 @@ class _HandChartState extends State<HandChart> {
       hand = '${r1.toSymbol()}${r2.toSymbol()}'; // Pocket pair
     }
     // print(data[hand]);
-    var handData = data.solutions[hand]!;
-    var actions = {"2", "0"};
-    var percentages = actions.map((action) => handData[action] ?? 0).toList();
+    var percentages = data.solutions[hand]!;
 
-    return MixedBox(
-      percentages: percentages,
-      colors: [Colors.red, Colors.green],
+    return ActionBox(
+      percentages: percentages
     );
   }
 }

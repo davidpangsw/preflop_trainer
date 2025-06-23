@@ -1,8 +1,7 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:spaced_repetition/SmResponse.dart';
-import 'package:spaced_repetition/sm.dart';
+import 'package:preflop_trainer/models/flashcard/sm.dart';
 
 class SmDeck {
   final sm = Sm();
@@ -47,7 +46,7 @@ class SmDeck {
     final cardId = reviewQueue.removeFirst();
     final state = responses[cardId]!;
     responses[cardId] = sm.calc(
-      quality: quality.value,
+      quality: quality,
       repetitions: state.repetitions + 1,
       previousInterval: state.interval,
       previousEaseFactor: state.easeFactor,
@@ -61,10 +60,7 @@ class SmDeck {
   }
 
   List<MapEntry<String, SmResponse>> topEntries(int size) {
-    return [
-      for (var key in top(size))
-        MapEntry(key, responses[key]!)
-    ];
+    return [for (var key in top(size)) MapEntry(key, responses[key]!)];
   }
 
   String toJson() {
@@ -97,17 +93,4 @@ class SmDeck {
     };
     return SmDeck(id: id, deck: deck, responses: responses);
   }
-}
-
-enum SmResponseQuality {
-  blackout(0), // Complete blackout
-  incorrectRemembered(1), // Incorrect response; correct one remembered
-  incorrectEasy(2), // Incorrect response; correct one seemed easy to recall
-  correctDifficult(3), // Correct response recalled with serious difficulty
-  correctHesitant(4), // Correct response after hesitation
-  perfect(5); // Perfect response
-
-  final int value;
-
-  const SmResponseQuality(this.value);
 }

@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:preflop_trainer/homepage.dart';
 import 'package:preflop_trainer/models/flashcard/flashcard_deck.dart';
+import 'package:preflop_trainer/models/flashcard/sm.dart';
 import 'package:preflop_trainer/models/flashcard/sm_deck.dart';
 import 'package:preflop_trainer/models/playing_card/hand.dart';
 import 'package:preflop_trainer/models/poker/poker_state.dart';
 import 'package:provider/provider.dart';
-import 'package:spaced_repetition/sm.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,7 +37,7 @@ class MyAppState extends ChangeNotifier {
   FlashcardDeck? flashcardDeck;
   SmDeck? smDeck;
   PokerState? pokerState;
-  bool? isPreviousCorrect;
+  FlashcardResult? flashcardResult;
 
   MyAppState(BuildContext context) {
     loadFlashcardDeck(context, "open/utg");
@@ -60,7 +60,7 @@ class MyAppState extends ChangeNotifier {
   }
 
   Future<void> loadFlashcardDeck(BuildContext context, String deckId) async {
-    print("loading flashcard deck $deckId...");
+    // print("loading flashcard deck $deckId...");
     flashcardDeck = await _loadFlashcardDeck(context, deckId);
     smDeck = SmDeck.withDefaultResponses(
       id: deckId,
@@ -73,39 +73,52 @@ class MyAppState extends ChangeNotifier {
     final hand = Hand.randomFromPreflopSymbol(preflopSymbol);
     pokerState = PokerState(
       position: PokerPosition.utg,
-      action: PokerAction.open,
+      situation: PokerSituation.open,
       hand: hand,
     );
 
     notifyListeners();
   }
 
-  void answerPokerState(int percentageBB) {
+  void onResponse(PokerAction action) {
+    if (flashcardResult != null) {
+      return; // do not update if previous result is still available
+    }
+
+    // update poker state based on the input
+    answerPokerState(action);
+  }
+
+  void answerPokerState(PokerAction? action) {
     // get the answer of current state
     // compare the input with the actual answer
     // calculate the grade
-    final isCorrect = flashcardDeck!.verifyResponse(
+    final result = flashcardDeck!.verifyResponse(
       pokerState!.hand.toPreflopSymbol(),
-      percentageBB,
+      action,
     );
     final _ = smDeck!.acceptResponse(
-      isCorrect ? SmResponseQuality.perfect : SmResponseQuality.blackout,
+      result.isCorrect ? SmResponseQuality.perfect : SmResponseQuality.blackout,
     );
 
     // update flashcard status based on the grade
     // final grade = correct? 5 : 0;
-    isPreviousCorrect = isCorrect;
+    flashcardResult = result;
 
+    notifyListeners();
+  }
+
+  void nextFlashcard() {
+    flashcardResult = null; // clear previous result
     // take another card
     final newItem = smDeck!.topCard!;
     final newHand = Hand.randomFromPreflopSymbol(newItem);
 
     pokerState = PokerState(
       position: PokerPosition.utg,
-      action: PokerAction.open,
+      situation: PokerSituation.open,
       hand: newHand,
     );
-
     notifyListeners();
   }
 }

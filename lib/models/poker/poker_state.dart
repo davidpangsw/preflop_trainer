@@ -1,14 +1,13 @@
-
 import 'package:preflop_trainer/models/playing_card/hand.dart';
 
 class PokerState {
   PokerPosition position;
-  PokerAction action;
+  PokerSituation situation;
   Hand hand;
 
   PokerState({
     required this.position,
-    required this.action,
+    required this.situation,
     required this.hand,
   });
 }
@@ -25,4 +24,16 @@ enum PokerPosition {
   bb,
 }
 
-enum PokerAction { open, threebet, fourbet }
+enum PokerAction { fold, check, call, raise }
+
+class PokerActionExtension {
+  static PokerAction fromString(String s) => switch (s) {
+    "Fold" => PokerAction.fold,
+    "Check" => PokerAction.check, // Similar to fold. You won't fold if you can check.
+    "Call" => PokerAction.call,
+    "Raise" => PokerAction.raise,
+    _ => throw FormatException('Invalid action: $s'),
+  };
+}
+
+enum PokerSituation { open, threebet, fourbet }

@@ -1,3 +1,5 @@
+import 'package:preflop_trainer/models/poker/poker_state.dart';
+
 class FlashcardDeck {
   final Map<String, dynamic> settings;
   final Map<String, Solution> solutions;
@@ -17,26 +19,37 @@ class FlashcardDeck {
     return FlashcardDeck(settings: settings, solutions: solutions);
   }
 
-  bool verifyResponse(String hand, int percentageBB) {
+  FlashcardResult verifyResponse(String hand, PokerAction? action) {
     final sol = solutions[hand]!;
 
     // print('$hand, $sol, $percentageBB');
 
-    String? keyMax;
+    if (action == null) {
+      return FlashcardResult(isCorrect: false, solution: sol);
+    }
+    PokerAction? keyMax;
     for (var entry in sol.entries) {
       if (keyMax == null || entry.value > sol[keyMax]!) {
         keyMax = entry.key;
       }
     }
-    int answer = (double.parse(keyMax!) * 100).round();
-    return (answer == percentageBB);
+    return FlashcardResult(isCorrect: action == keyMax, solution: sol);
   }
 }
 
-typedef Solution = Map<String, double>;
+typedef Solution = Map<PokerAction, double>;
 Solution _solutionFromJson(Map<String, dynamic> d) {
   return {
-    for (var entry in d.entries)
-      entry.key: double.parse(entry.value.toString()),
+    for (MapEntry<String, dynamic> entry in d.entries)
+      PokerActionExtension.fromString(entry.key): double.parse(
+        entry.value.toString(),
+      ),
   };
+}
+
+class FlashcardResult {
+  final bool isCorrect;
+  final Map<PokerAction, double> solution;
+
+  const FlashcardResult({required this.isCorrect, required this.solution});
 }
