@@ -1,5 +1,7 @@
 // This file uses SM2 algorithm
 
+import 'dart:convert';
+
 class Sm {
   // repeitions >= 0
   // previousInterval >= 0
@@ -58,6 +60,28 @@ class SmResponse {
     required this.repetitions,
     required this.easeFactor,
   });
+
+  String toJson() => json.encode({
+    'interval': interval,
+    'repetitions': repetitions,
+    'easeFactor': easeFactor,
+  });
+
+  factory SmResponse.fromJson(Map<String, dynamic> json) {
+    return SmResponse(
+      interval: json['interval'],
+      repetitions: json['repetitions'],
+      easeFactor: json['easeFactor'],
+    );
+  }
+  factory SmResponse.fromJsonString(String s) {
+    return SmResponse.fromJson(jsonDecode(s) as Map<String, dynamic>);
+  }
+
+  @override
+  String toString() {
+    return 'SmResponse(interval: $interval, repetitions: $repetitions, easeFactor: $easeFactor)';
+  }
 }
 
 enum SmResponseQuality {

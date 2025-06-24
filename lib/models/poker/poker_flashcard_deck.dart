@@ -1,13 +1,17 @@
 import 'package:preflop_trainer/models/poker/poker_state.dart';
 
-class FlashcardDeck {
-  final Map<String, dynamic> settings;
+// Corresponding one 'xxx.json' file
+class PokerFlashcardDeck {
+  final FlashcardDeckSettings settings;
+  // final Map<String, dynamic> settings;
   final Map<String, Solution> solutions;
 
-  FlashcardDeck({required this.settings, required this.solutions});
+  PokerFlashcardDeck({required this.settings, required this.solutions});
 
-  factory FlashcardDeck.fromJson(Map<String, dynamic> json) {
-    var settings = json['settings'] as Map<String, dynamic>;
+  factory PokerFlashcardDeck.fromJson(Map<String, dynamic> json) {
+    var settings = FlashcardDeckSettings.fromJson(
+      json['settings'] as Map<String, dynamic>,
+    );
     // print(json['settings']);
     // print(json['settings'] as Map<String, dynamic>);
 
@@ -16,10 +20,12 @@ class FlashcardDeck {
         entry.key: _solutionFromJson(entry.value),
     };
     // print(json['solutions']);
-    return FlashcardDeck(settings: settings, solutions: solutions);
+    return PokerFlashcardDeck(settings: settings, solutions: solutions);
   }
 
   FlashcardResult verifyResponse(String hand, PokerAction? action) {
+    // get the answer of current state
+    // compare the input with the actual answer
     final sol = solutions[hand]!;
 
     // print('$hand, $sol, $percentageBB');
@@ -37,6 +43,19 @@ class FlashcardDeck {
   }
 }
 
+class FlashcardDeckSettings {
+  final PokerPosition position;
+  final PokerSituation situation;
+  FlashcardDeckSettings({required this.position, required this.situation});
+
+  factory FlashcardDeckSettings.fromJson(Map<String, dynamic> json) {
+    final position = PokerPositionExtension.fromString(json['position']);
+    final situation = PokerSituationExtension.fromString(json['situation']);
+    return FlashcardDeckSettings(position: position, situation: situation);
+  }
+}
+
+// One Solution correspond to one "card"
 typedef Solution = Map<PokerAction, double>;
 Solution _solutionFromJson(Map<String, dynamic> d) {
   return {

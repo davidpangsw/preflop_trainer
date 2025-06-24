@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_json_view/flutter_json_view.dart';
 import 'package:preflop_trainer/flashcard_widget.dart';
 import 'package:preflop_trainer/main.dart';
 import 'package:provider/provider.dart';
@@ -34,6 +35,9 @@ class MyHomePage extends StatelessWidget {
           children: [
             FlashcardWidget(),
             // HandChart(),
+            (appState.pack == null)
+                ? CircularProgressIndicator()
+                : JsonView.string(appState.pack!.toBriefJson()),
           ],
         ),
       ),

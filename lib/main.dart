@@ -1,11 +1,7 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:preflop_trainer/homepage.dart';
-import 'package:preflop_trainer/models/flashcard/flashcard_deck.dart';
-import 'package:preflop_trainer/models/flashcard/sm.dart';
-import 'package:preflop_trainer/models/flashcard/sm_deck.dart';
-import 'package:preflop_trainer/models/playing_card/hand.dart';
+import 'package:preflop_trainer/models/pack.dart';
+import 'package:preflop_trainer/models/poker/poker_flashcard_deck.dart';
 import 'package:preflop_trainer/models/poker/poker_state.dart';
 import 'package:provider/provider.dart';
 
@@ -33,92 +29,49 @@ class MyApp extends StatelessWidget {
 }
 
 class MyAppState extends ChangeNotifier {
-  final Sm sm = Sm();
-  FlashcardDeck? flashcardDeck;
-  SmDeck? smDeck;
-  PokerState? pokerState;
-  FlashcardResult? flashcardResult;
+  Pack? pack;
+  PokerState? flashcardQuestion; // current game state to display
+  FlashcardResult? flashcardResult; // result of current flashcard
 
   MyAppState(BuildContext context) {
-    loadFlashcardDeck(context, "open/utg");
+    // loadFlashcardDeck(context, "open/utg");
+    loadPack(context, "open/utg");
   }
 
-  static Future<FlashcardDeck> _loadFlashcardDeck(
-    BuildContext context,
-    String deckId,
-  ) async {
-    final bundle = DefaultAssetBundle.of(context);
-    final Map<String, dynamic> jsonData = await bundle.loadStructuredData(
-      'decks/$deckId.json',
-      (value) async {
-        return json.decode(value);
-      },
-    );
-    // final String jsonString = await bundle.loadString('decks/$deckId.json');
-    // final jsonData = json.decode(jsonString) as Map<String, dynamic>;
-    return FlashcardDeck.fromJson(jsonData);
-  }
-
-  Future<void> loadFlashcardDeck(BuildContext context, String deckId) async {
-    // print("loading flashcard deck $deckId...");
-    flashcardDeck = await _loadFlashcardDeck(context, deckId);
-    smDeck = SmDeck.withDefaultResponses(
-      id: deckId,
-      deck: flashcardDeck!.solutions.keys.toList(),
-    );
-    // await Future.delayed(const Duration(seconds: 10));
-    // print("flashcard deck loaded");
-
-    final preflopSymbol = smDeck!.topCard!;
-    final hand = Hand.randomFromPreflopSymbol(preflopSymbol);
-    pokerState = PokerState(
-      position: PokerPosition.utg,
-      situation: PokerSituation.open,
-      hand: hand,
-    );
-
+  Future<void> loadPack(BuildContext context, String packId) async {
+    pack = await Pack.load(context, packId);
+    flashcardQuestion = pack!.nextQuestion();
     notifyListeners();
   }
 
-  void onResponse(PokerAction action) {
-    if (flashcardResult != null) {
-      return; // do not update if previous result is still available
-    }
+  void onResponse(PokerAction? action) {
+    // do not update if no pack is available
+    if (pack == null) return;
 
-    // update poker state based on the input
-    answerPokerState(action);
-  }
+    // do not update if previous result is still available
+    if (flashcardResult != null) return;
 
-  void answerPokerState(PokerAction? action) {
-    // get the answer of current state
-    // compare the input with the actual answer
-    // calculate the grade
-    final result = flashcardDeck!.verifyResponse(
-      pokerState!.hand.toPreflopSymbol(),
-      action,
-    );
-    final _ = smDeck!.acceptResponse(
-      result.isCorrect ? SmResponseQuality.perfect : SmResponseQuality.blackout,
-    );
-
-    // update flashcard status based on the grade
-    // final grade = correct? 5 : 0;
-    flashcardResult = result;
+    flashcardResult = pack!.acceptResponse(action);
 
     notifyListeners();
   }
 
   void nextFlashcard() {
-    flashcardResult = null; // clear previous result
-    // take another card
-    final newItem = smDeck!.topCard!;
-    final newHand = Hand.randomFromPreflopSymbol(newItem);
+    if (pack == null) return;
 
-    pokerState = PokerState(
-      position: PokerPosition.utg,
-      situation: PokerSituation.open,
-      hand: newHand,
-    );
+    flashcardResult = null; // clear previous result
+    flashcardQuestion = pack!.nextQuestion();
+
+    notifyListeners();
+  }
+
+  void onReduceDue(Duration duration) {
+    if (pack == null) return;
+
+    pack!.reduceDue(duration);
+    flashcardResult = null; // clear previous result
+    flashcardQuestion = pack!.nextQuestion();
+
     notifyListeners();
   }
 }

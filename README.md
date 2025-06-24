@@ -5,12 +5,25 @@ A Flutter project for Poker Preflop training
 ## Roadmap
 - No feature creep: Only preflop training is enough. Only implement the game setting I am playing for now.
 
-- Day 1:
-    - Randomly draw and Visualize game state
-    - Import all OPEN answers
-    - Setting up Flashcards and Algorithm (SM2)
-    - Host on vercel.app
+#### Randomly draw and Visualize game state
+Done
+#### Setting up Flashcards and Algorithm (SM2)
+Done
+#### Host on vercel.app
+Done
+#### Deck State Persistance
+Done
+#### Only show due cards
+Done
+#### Offline development (get rid of online dependencies)
+Done (run `localtest.zsh`)
+#### Import all OPEN answers
+Not Done
+#### Multiple deck combining
+#### Multiple Page
+#### Chart comparing
 
+#### UI/UX Tuning
 
 ## Getting Started
 

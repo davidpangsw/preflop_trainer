@@ -39,6 +39,7 @@ dependencies:
   # spaced_repetition: ^0.1.0 # the sm algorithm here is a bit wrong?
   collection: ^1.19.1
   flutter_json_view: ^1.1.5
+  shared_preferences: ^2.5.3
 
 dev_dependencies:
   flutter_test:

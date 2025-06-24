@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:preflop_trainer/action_box.dart';
 import 'package:preflop_trainer/main.dart';
-import 'package:preflop_trainer/models/flashcard/flashcard_deck.dart';
+import 'package:preflop_trainer/models/poker/poker_flashcard_deck.dart';
 import 'package:preflop_trainer/models/playing_card/card.dart' as models;
 import 'package:provider/provider.dart';
 
@@ -28,9 +28,7 @@ class _HandChartState extends State<HandChart> {
     // final FlashcardDeck data = snapshot.data!;
 
     var appState = context.watch<MyAppState>();
-    final FlashcardDeck? data = appState.flashcardDeck;
-
-    if (appState.flashcardDeck == null) {
+    if (appState.pack == null) {
       return const Center(child: CircularProgressIndicator());
     }
 
@@ -71,7 +69,7 @@ class _HandChartState extends State<HandChart> {
                 SizedBox(
                   width: 40,
                   height: 40,
-                  child: getCell(row, col, data!),
+                  child: getCell(row, col, appState.pack!._flashcardDeck),
                 ),
             ],
           ),
@@ -80,7 +78,7 @@ class _HandChartState extends State<HandChart> {
   }
 
   // Get cell content for grid position
-  Widget getCell(int row, int col, FlashcardDeck data) {
+  Widget getCell(int row, int col, PokerFlashcardDeck data) {
     // row, col: 0 - 12
     // v1, v2: 14 - 2
     // r1, r2: A - 2

@@ -8,6 +8,26 @@ import 'package:preflop_trainer/card_widget.dart';
 class FlashcardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    final appState = context.watch<MyAppState>();
+    if (appState.pack == null) return CircularProgressIndicator();
+    final nextDue = appState.pack!.nextDue;
+    if (nextDue == null) return Text('No cards');
+
+    if (nextDue.isAfter(DateTime.now())) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        Text('Next Due Card at $nextDue'),
+        ElevatedButton(
+          onPressed: () {
+            appState.onReduceDue(Duration(days: 1));
+          },
+          child: Text('Reduce one day'),
+        ),
+      ],
+    );
+    }
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: [PokerStateWidget(), PanelWidget(), AnswerWidget()],
@@ -19,7 +39,7 @@ class PokerStateWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final appState = context.watch<MyAppState>();
-    final pokerState = appState.pokerState;
+    final pokerState = appState.flashcardQuestion;
 
     if (pokerState == null) return CircularProgressIndicator();
 
@@ -29,7 +49,7 @@ class PokerStateWidget extends StatelessWidget {
       children: [
         Text(pokerState.position.name.toUpperCase()),
         Text(pokerState.situation.name.toUpperCase()),
-        Text(''),
+        Text('${appState.pack!.dueCards.length} left'),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -55,8 +75,9 @@ class PanelWidget extends StatelessWidget {
       );
     }
 
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      spacing: 50.0,
       children: [
         ElevatedButton(
           onPressed: () {
@@ -66,19 +87,19 @@ class PanelWidget extends StatelessWidget {
         ),
         // ElevatedButton(
         //   onPressed: () {
-        //     appState.answerPokerState(PokerAction.call);
+        //     appState.onResponse(PokerAction.call);
         //   },
         //   child: Text('Call'),
         // ),
         ElevatedButton(
           onPressed: () {
-            appState.answerPokerState(PokerAction.raise);
+            appState.onResponse(PokerAction.raise);
           },
           child: Text('Raise'),
         ),
         ElevatedButton(
           onPressed: () {
-            appState.answerPokerState(null);
+            appState.onResponse(null);
           },
           child: Text('I am not sure.'),
         ),
@@ -107,16 +128,5 @@ class AnswerWidget extends StatelessWidget {
         ActionBox(percentages: result.solution),
       ],
     );
-
-    // if (appState.smDeck == null) return CircularProgressIndicator();
-    // final map = {
-    //   for (var entry in appState.smDeck!.topEntries(5))
-    //     entry.key: {
-    //       'interval': entry.value.interval,
-    //       'repetitions': entry.value.repetitions,
-    //       'easeFactor': entry.value.easeFactor,
-    //     },
-    // };
-    // return JsonView.map(map);
   }
 }
