@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:preflop_trainer/action_box.dart';
+import 'package:preflop_trainer/utils/action_box.dart';
 import 'package:preflop_trainer/main.dart';
 import 'package:preflop_trainer/models/poker/poker_state.dart';
 import 'package:provider/provider.dart';
-import 'package:preflop_trainer/card_widget.dart';
+import 'package:preflop_trainer/utils/card_widget.dart';
 
 class FlashcardWidget extends StatelessWidget {
   @override
@@ -44,6 +44,7 @@ class PokerStateWidget extends StatelessWidget {
     if (pokerState == null) return CircularProgressIndicator();
 
     var hand = pokerState.hand;
+    // print(pokerState.position.toString());
 
     return Column(
       children: [
@@ -69,7 +70,7 @@ class PanelWidget extends StatelessWidget {
     if (appState.flashcardResult != null) {
       return ElevatedButton(
         onPressed: () {
-          appState.nextFlashcard();
+          appState.onNextFlashcard();
         },
         child: Text('Next'),
       );

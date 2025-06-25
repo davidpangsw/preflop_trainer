@@ -11,12 +11,12 @@ class ActionBox extends StatelessWidget {
   Widget build(BuildContext context) {
     return MixedBox(
       percentages: [
-        percentages[PokerAction.fold] ?? 0,
-        percentages[PokerAction.check] ?? 0,
-        percentages[PokerAction.call] ?? 0,
         percentages[PokerAction.raise] ?? 0,
+        percentages[PokerAction.call] ?? 0,
+        percentages[PokerAction.check] ?? 0,
+        percentages[PokerAction.fold] ?? 0,
       ],
-      colors: [Colors.blue, Colors.blue, Colors.green, Colors.red],
+      colors: [Colors.red, Colors.green, Colors.blue, Colors.blue],
     );
   }
 }

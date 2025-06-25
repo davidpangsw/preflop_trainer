@@ -13,6 +13,7 @@ class Pack {
 
   // Store the solutions under different poker game states
   final PokerFlashcardDeck _flashcardDeck;
+  get flashcardDeck => _flashcardDeck;
 
   // Manage a String -> SmCardState Mapping
   // Store the Sm state of each card, and a review queue.

@@ -1,45 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_json_view/flutter_json_view.dart';
-import 'package:preflop_trainer/flashcard_widget.dart';
-import 'package:preflop_trainer/main.dart';
-import 'package:provider/provider.dart';
+import 'package:preflop_trainer/select_training_page/select_training_page.dart';
+import 'package:preflop_trainer/training_page/training_page.dart';
 
-class MyHomePage extends StatelessWidget {
+class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
   final String title;
 
   @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int selectedIndex = 1;
+  @override
   Widget build(BuildContext context) {
-    var appState = context.watch<MyAppState>();
+    Widget page;
+    switch (selectedIndex) {
+      case 0:
+        page = TrainingPage();
+      case 1:
+        page = SelectTrainingPage();
+      case 2:
+        page = Placeholder();
+      default:
+        throw UnimplementedError('no widget for $selectedIndex');
+    }
     return Scaffold(
-      // appBar: AppBar(
-      //   backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-      //   title: Text(title),
-      // ),
-      body: Center(
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          //
-          // TRY THIS: Invoke "debug painting" (choose the "Toggle Debug Paint"
-          // action in the IDE, or press "p" in the console), to see the
-          // wireframe for each widget.
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            FlashcardWidget(),
-            // HandChart(),
-            (appState.pack == null)
-                ? CircularProgressIndicator()
-                : JsonView.string(appState.pack!.toBriefJson()),
-          ],
-        ),
+      body: Row(
+        children: [
+          SafeArea(
+            child: NavigationRail(
+              extended: false,
+              destinations: [
+                NavigationRailDestination(
+                  icon: Icon(Icons.model_training),
+                  label: Text('Training'),
+                ),
+                NavigationRailDestination(
+                  icon: Icon(Icons.table_chart),
+                  label: Text('Select Training'),
+                ),
+              ],
+              selectedIndex: selectedIndex,
+              onDestinationSelected: (value) {
+                setState(() {
+                  selectedIndex = value;
+                });
+              },
+            ),
+          ),
+          Expanded(
+            child: Container(
+              color: Theme.of(context).colorScheme.primaryContainer,
+              child: page,
+            ),
+          ),
+        ],
       ),
     );
   }

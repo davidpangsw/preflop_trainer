@@ -21,7 +21,7 @@ enum PokerPosition {
   co,
   btn,
   sb,
-  bb,
+  bb;
 }
 
 class PokerPositionExtension {
@@ -37,6 +37,8 @@ class PokerPositionExtension {
     "bb" => PokerPosition.bb,
     _ => throw FormatException('Invalid position: $s'),
   };
+
+
 }
 
 enum PokerAction { fold, check, call, raise }

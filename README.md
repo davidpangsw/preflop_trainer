@@ -19,11 +19,16 @@ Done
 Done (run `localtest.zsh`)
 #### Import all OPEN answers
 Not Done
-#### Multiple deck combining
-#### Multiple Page
+#### Chart Page
+- select deck
+Done
 #### Chart comparing
+- fix: 50/50? win or loss?
 
 #### UI/UX Tuning
+
+#### Multiple deck combining
+#### Final test, hot fix, gather next stage requirements
 
 ## Getting Started
 

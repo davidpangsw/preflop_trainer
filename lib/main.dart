@@ -34,7 +34,6 @@ class MyAppState extends ChangeNotifier {
   FlashcardResult? flashcardResult; // result of current flashcard
 
   MyAppState(BuildContext context) {
-    // loadFlashcardDeck(context, "open/utg");
     loadPack(context, "open/utg");
   }
 
@@ -56,7 +55,7 @@ class MyAppState extends ChangeNotifier {
     notifyListeners();
   }
 
-  void nextFlashcard() {
+  void onNextFlashcard() {
     if (pack == null) return;
 
     flashcardResult = null; // clear previous result
@@ -73,5 +72,9 @@ class MyAppState extends ChangeNotifier {
     flashcardQuestion = pack!.nextQuestion();
 
     notifyListeners();
+  }
+
+  onSelectPosition(BuildContext context, PokerPosition position) {
+    loadPack(context, "open/${position.name}");
   }
 }

@@ -1,6 +1,6 @@
 
 import 'package:flutter/material.dart';
-import 'package:preflop_trainer/action_box.dart';
+import 'package:preflop_trainer/utils/action_box.dart';
 import 'package:preflop_trainer/main.dart';
 import 'package:preflop_trainer/models/poker/poker_flashcard_deck.dart';
 import 'package:preflop_trainer/models/playing_card/card.dart' as models;
@@ -69,7 +69,7 @@ class _HandChartState extends State<HandChart> {
                 SizedBox(
                   width: 40,
                   height: 40,
-                  child: getCell(row, col, appState.pack!._flashcardDeck),
+                  child: getCell(row, col, appState.pack!.flashcardDeck),
                 ),
             ],
           ),
