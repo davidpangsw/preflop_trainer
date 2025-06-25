@@ -46,7 +46,7 @@ class SelectTrainingPanel extends StatelessWidget {
         button(context, 'co', PokerPosition.co),
         button(context, 'btn', PokerPosition.btn),
         button(context, 'sb', PokerPosition.sb),
-        button(context, 'bb', PokerPosition.bb),
+        // button(context, 'bb', PokerPosition.bb),
       ],
     );
   }

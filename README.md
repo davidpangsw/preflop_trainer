@@ -17,11 +17,11 @@ Done
 Done
 #### Offline development (get rid of online dependencies)
 Done (run `localtest.zsh`)
-#### Import all OPEN answers
-Not Done
 #### Chart Page
 - select deck
 Done
+#### Import all OPEN answers
+Not Done
 #### Chart comparing
 - fix: 50/50? win or loss?
 
