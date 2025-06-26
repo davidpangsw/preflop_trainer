@@ -17,7 +17,7 @@ class PokerFlashcardDeck {
 
     var solutions = {
       for (var entry in (json['solutions'] as Map<String, dynamic>).entries)
-        entry.key: _solutionFromJson(entry.value as Map<String, String>),
+        entry.key: _solutionFromJson(entry.value),
     };
     // print(json['solutions']);
     return PokerFlashcardDeck(settings: settings, solutions: solutions);
@@ -47,7 +47,7 @@ class FlashcardDeckSettings {
 typedef Solution = Map<PokerAction, double>;
 // caller should ensure all the values are proper double within [0, 1]
 // and their sum is in [0, 1]
-Solution _solutionFromJson(Map<String, String> d) {
+Solution _solutionFromJson(Map<String, dynamic> d) {
   var ret = <PokerAction, double>{};
   double total = 1.0;
   for (MapEntry<String, dynamic> entry in d.entries) {
