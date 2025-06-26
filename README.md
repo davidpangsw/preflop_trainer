@@ -35,7 +35,7 @@ Done
     - clean memory button
     - Multiple deck combining
     - Remove all the useless "Fold" keys
-    - Capture table from HTTP request
+    - Capture table from HTTP request, or other sources
     - Small blind using General rate
 
 ## Getting Started
