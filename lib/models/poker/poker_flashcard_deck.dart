@@ -46,12 +46,17 @@ class FlashcardDeckSettings {
 // One Solution correspond to one "card"
 typedef Solution = Map<PokerAction, double>;
 Solution _solutionFromJson(Map<String, dynamic> d) {
-  return {
-    for (MapEntry<String, dynamic> entry in d.entries)
-      PokerAction.fromString(entry.key): double.parse(
-        entry.value.toString(),
-      ),
-  };
+  var ret = <PokerAction, double>{};
+  double total = 1;
+  for (MapEntry<String, dynamic> entry in d.entries) {
+    PokerAction action = PokerAction.fromString(entry.key);
+    double p = double.parse(entry.value.toString());
+    total = total - p;
+    ret[action] = p;
+  }
+  ret[PokerAction.fold] = total;
+
+  return ret;
 }
 
 class FlashcardResult {
@@ -87,7 +92,7 @@ class FlashcardResult {
         }
       }
     }
-    
+
     return FlashcardResult(
       hand: hand,
       solution: sol,

@@ -32,6 +32,7 @@ Done
 
 #### Final test, hot fix, gather next stage requirements
 - Next stage:
+    - Github auto deploy
     - "Clean memory" button
     - Multiple deck combining
     - Remove all the useless "Fold" keys in data
