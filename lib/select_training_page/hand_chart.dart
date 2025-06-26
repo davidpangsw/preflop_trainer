@@ -99,6 +99,7 @@ class _HandChartState extends State<HandChart> {
     var percentages = data.solutions[hand]!;
 
     return ActionBox(
+      hand: hand,
       percentages: percentages
     );
   }

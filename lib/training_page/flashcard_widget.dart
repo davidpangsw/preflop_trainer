@@ -126,7 +126,7 @@ class AnswerWidget extends StatelessWidget {
             fontSize: 20.0,
           ),
         ),
-        ActionBox(percentages: result.solution),
+        ActionBox(hand: result.hand, percentages: result.solution),
       ],
     );
   }

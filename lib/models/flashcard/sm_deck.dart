@@ -42,6 +42,9 @@ class SmDeck {
           dueDate: DateTime.now(),
         ),
     };
+
+    deck.shuffle(); // shuffle the deck to give random start
+
     return SmDeck(id: id, deck: deck, cardStates: cardStates);
   }
 

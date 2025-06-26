@@ -27,19 +27,7 @@ class PokerFlashcardDeck {
     // get the answer of current state
     // compare the input with the actual answer
     final sol = solutions[hand]!;
-
-    // print('$hand, $sol, $percentageBB');
-
-    if (action == null) {
-      return FlashcardResult(isCorrect: false, solution: sol);
-    }
-    PokerAction? keyMax;
-    for (var entry in sol.entries) {
-      if (keyMax == null || entry.value > sol[keyMax]!) {
-        keyMax = entry.key;
-      }
-    }
-    return FlashcardResult(isCorrect: action == keyMax, solution: sol);
+    return FlashcardResult.verify(hand: hand, sol: sol, action: action);
   }
 }
 
@@ -67,8 +55,42 @@ Solution _solutionFromJson(Map<String, dynamic> d) {
 }
 
 class FlashcardResult {
-  final bool isCorrect;
+  final String hand;
   final Map<PokerAction, double> solution;
+  final PokerAction action;
+  final bool isCorrect;
 
-  const FlashcardResult({required this.isCorrect, required this.solution});
+  const FlashcardResult({
+    required this.hand,
+    required this.solution,
+    required this.action,
+    required this.isCorrect,
+  });
+
+  factory FlashcardResult.verify({
+    required hand,
+    required sol,
+    required action,
+  }) {
+    // print('$hand, $sol, $percentageBB');
+
+    bool isCorrect;
+    if (action == null) {
+      isCorrect = false;
+    } else {
+      PokerAction? keyMax;
+      for (var entry in sol.entries) {
+        if (keyMax == null || entry.value > sol[keyMax]!) {
+          keyMax = entry.key;
+        }
+      }
+      isCorrect = (action == keyMax);
+    }
+    return FlashcardResult(
+      hand: hand,
+      solution: sol,
+      action: action,
+      isCorrect: isCorrect,
+    );
+  }
 }

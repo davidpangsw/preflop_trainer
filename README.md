@@ -21,8 +21,9 @@ Done (run `localtest.zsh`)
 - select deck
 Done
 #### Import all OPEN answers
-Not Done
+Done
 #### Chart comparing
+- Hover full tool tip (action box)
 - fix: 50/50? win or loss?
 
 #### UI/UX Tuning
