@@ -41,6 +41,7 @@ class SelectTrainingPanel extends StatelessWidget {
     return Column(
       spacing: 10.0,
       children: [
+        Text('Currently only support 100 Stack, NL50, GTO cashgame. Only opening is supported, but more situation may be available in the future. If you are interested for more features, feel free to contact me!'),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
