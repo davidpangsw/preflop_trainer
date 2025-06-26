@@ -26,7 +26,7 @@ class SelectTrainingPage extends StatelessWidget {
         //     ? CircularProgressIndicator()
         //     : JsonView.string(appState.pack!.toBriefJson()),
         Text(
-          '100 Stack, NL50, GTO cashgame, only opening.\nMore situation will be available in the future.\nIf you are want more features, feel free to contact me!',
+          '100 Stack, NL50, GTO cash game, only opening.\nMore situation will be available in the future.\nIf you are want more features, feel free to contact me!',
         ),
       ],
     );
