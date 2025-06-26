@@ -78,14 +78,16 @@ class FlashcardResult {
     if (action == null) {
       isCorrect = false;
     } else {
-      PokerAction? keyMax;
+      double p = sol[action] ?? 0;
+      isCorrect = true;
       for (var entry in sol.entries) {
-        if (keyMax == null || entry.value > sol[keyMax]!) {
-          keyMax = entry.key;
+        if (p < entry.value) {
+          isCorrect = false;
+          break;
         }
       }
-      isCorrect = (action == keyMax);
     }
+    
     return FlashcardResult(
       hand: hand,
       solution: sol,
