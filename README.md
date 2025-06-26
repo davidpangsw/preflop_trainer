@@ -39,6 +39,7 @@ Done
     - Capture table from HTTP request, or other sources
     - Small blind using General rate
     - Data into database
+    - Navigation Rail Appear/Disappear
 
 ## Getting Started
 
