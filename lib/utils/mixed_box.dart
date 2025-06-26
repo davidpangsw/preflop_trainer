@@ -9,7 +9,9 @@ class MixedBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      decoration: BoxDecoration(border: Border.all(color: Colors.black)),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black, style: BorderStyle.solid, width: 1)
+        ),
       child: SizedBox(
         width: double.infinity,
         height: 50, // Adjust height as needed

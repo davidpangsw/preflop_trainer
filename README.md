@@ -25,6 +25,7 @@ Done
 #### Chart comparing
 - Hover full tool tip (action box)
 - fix: 50/50? win or loss?
+Done
 
 #### UI/UX Tuning
 

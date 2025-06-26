@@ -14,18 +14,18 @@ class FlashcardWidget extends StatelessWidget {
     if (nextDue == null) return Text('No cards');
 
     if (nextDue.isAfter(DateTime.now())) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Text('Next Due Card at $nextDue'),
-        ElevatedButton(
-          onPressed: () {
-            appState.onReduceDue(Duration(days: 1));
-          },
-          child: Text('Reduce one day'),
-        ),
-      ],
-    );
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text('Next Due Card at $nextDue'),
+          ElevatedButton(
+            onPressed: () {
+              appState.onReduceDue(Duration(days: 1));
+            },
+            child: Text('Reduce one day'),
+          ),
+        ],
+      );
     }
 
     return Column(
@@ -48,8 +48,14 @@ class PokerStateWidget extends StatelessWidget {
 
     return Column(
       children: [
-        Text(pokerState.position.name.toUpperCase()),
-        Text(pokerState.situation.name.toUpperCase()),
+        Text(
+          textScaler: TextScaler.linear(2),
+          pokerState.position.name.toUpperCase(),
+        ),
+        Text(
+          textScaler: TextScaler.linear(2),
+          pokerState.situation.name.toUpperCase(),
+        ),
         Text('${appState.pack!.dueCards.length} left'),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -78,25 +84,30 @@ class PanelWidget extends StatelessWidget {
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
       spacing: 50.0,
       children: [
-        ElevatedButton(
-          onPressed: () {
-            appState.onResponse(PokerAction.fold); // or check
-          },
-          child: Text('Fold'),
-        ),
-        // ElevatedButton(
-        //   onPressed: () {
-        //     appState.onResponse(PokerAction.call);
-        //   },
-        //   child: Text('Call'),
-        // ),
-        ElevatedButton(
-          onPressed: () {
-            appState.onResponse(PokerAction.raise);
-          },
-          child: Text('Raise'),
+        Row(
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                appState.onResponse(PokerAction.fold); // or check
+              },
+              child: Text('Fold'),
+            ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     appState.onResponse(PokerAction.call);
+            //   },
+            //   child: Text('Call'),
+            // ),
+            ElevatedButton(
+              onPressed: () {
+                appState.onResponse(PokerAction.raise);
+              },
+              child: Text('Raise'),
+            ),
+          ],
         ),
         ElevatedButton(
           onPressed: () {

@@ -30,6 +30,7 @@ class ActionBox extends StatelessWidget {
 
     return Tooltip(
       message: msg,
+      // message: '',
       child: MixedBox(
         percentages: [
           percentages[PokerAction.raise] ?? 0,
