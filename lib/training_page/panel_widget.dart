@@ -67,7 +67,7 @@ class PanelWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Expanded(child: _button(appState, PokerAction.raise)),
-                  Expanded(child: _button(appState, PokerAction.call)),
+                  // Expanded(child: _button(appState, PokerAction.call)),
                   Expanded(child: _button(appState, PokerAction.fold)),
                 ],
               ),
