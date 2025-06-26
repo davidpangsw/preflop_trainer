@@ -32,11 +32,12 @@ Done
 
 #### Final test, hot fix, gather next stage requirements
 - Next stage:
-    - clean memory button
+    - "Clean memory" button
     - Multiple deck combining
-    - Remove all the useless "Fold" keys
+    - Remove all the useless "Fold" keys in data
     - Capture table from HTTP request, or other sources
     - Small blind using General rate
+    - Data into database
 
 ## Getting Started
 
