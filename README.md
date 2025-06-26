@@ -28,9 +28,12 @@ Done
 Done
 
 #### UI/UX Tuning
+Done
 
-#### Multiple deck combining
 #### Final test, hot fix, gather next stage requirements
+
+- Next stage:
+    - Multiple deck combining
 
 ## Getting Started
 

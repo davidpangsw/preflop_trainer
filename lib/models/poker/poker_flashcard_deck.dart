@@ -37,8 +37,8 @@ class FlashcardDeckSettings {
   FlashcardDeckSettings({required this.position, required this.situation});
 
   factory FlashcardDeckSettings.fromJson(Map<String, dynamic> json) {
-    final position = PokerPositionExtension.fromString(json['position']);
-    final situation = PokerSituationExtension.fromString(json['situation']);
+    final position = PokerPosition.fromString(json['position']);
+    final situation = PokerSituation.fromString(json['situation']);
     return FlashcardDeckSettings(position: position, situation: situation);
   }
 }
@@ -48,7 +48,7 @@ typedef Solution = Map<PokerAction, double>;
 Solution _solutionFromJson(Map<String, dynamic> d) {
   return {
     for (MapEntry<String, dynamic> entry in d.entries)
-      PokerActionExtension.fromString(entry.key): double.parse(
+      PokerAction.fromString(entry.key): double.parse(
         entry.value.toString(),
       ),
   };
@@ -57,7 +57,7 @@ Solution _solutionFromJson(Map<String, dynamic> d) {
 class FlashcardResult {
   final String hand;
   final Map<PokerAction, double> solution;
-  final PokerAction action;
+  final PokerAction? action;
   final bool isCorrect;
 
   const FlashcardResult({

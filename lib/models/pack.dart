@@ -13,15 +13,19 @@ class Pack {
 
   // Store the solutions under different poker game states
   final PokerFlashcardDeck _flashcardDeck;
-  get flashcardDeck => _flashcardDeck;
+  PokerFlashcardDeck get flashcardDeck => _flashcardDeck;
 
   // Manage a String -> SmCardState Mapping
   // Store the Sm state of each card, and a review queue.
   // No knowledge about the poker
   SmDeck _smDeck;
 
-  Pack({required this.id, required PokerFlashcardDeck flashcardDeck, required SmDeck smDeck})
-    : _flashcardDeck = flashcardDeck, _smDeck = smDeck;
+  Pack({
+    required this.id,
+    required PokerFlashcardDeck flashcardDeck,
+    required SmDeck smDeck,
+  }) : _flashcardDeck = flashcardDeck,
+       _smDeck = smDeck;
 
   Iterable<String> get dueCards => _smDeck.dueCards;
 
@@ -57,9 +61,7 @@ class Pack {
     return result;
   }
 
-  static Future<Pack> load(BuildContext context, String packId) async {
-    final bundle = DefaultAssetBundle.of(context);
-
+  static Future<Pack> load(AssetBundle bundle, String packId) async {
     // load decks/deckId
     // load from decks/$deckId.json
     final Map<String, dynamic> jsonData = await bundle.loadStructuredData(
