@@ -45,7 +45,7 @@ class TrainingPage extends StatelessWidget {
       //   FlashcardWidget(),
       // ],
       children: [
-        SafeArea(child: PokerStateWidget()),
+        PokerStateWidget(),
         Expanded(child: PanelWidget()),
       ],
     );

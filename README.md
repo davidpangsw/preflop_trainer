@@ -31,8 +31,8 @@ Done
 Done
 
 #### Final test, hot fix, gather next stage requirements
-
 - Next stage:
+    - clean memory button
     - Multiple deck combining
     - Remove all the useless "Fold" keys
     - Capture table from HTTP request

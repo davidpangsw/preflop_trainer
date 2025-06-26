@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:preflop_trainer/utils/action_box.dart';
 import 'package:preflop_trainer/main.dart';
@@ -15,7 +14,11 @@ class HandChart extends StatefulWidget {
 
 class _HandChartState extends State<HandChart> {
   final int gridSize = 13;
-  final List<models.Rank> allRanks = models.RankExtension.ranksSortedByPokerValue.reversed.toList();
+  final List<models.Rank> allRanks = models
+      .RankExtension
+      .ranksSortedByPokerValue
+      .reversed
+      .toList();
   @override
   Widget build(BuildContext context) {
     // if (snapshot.connectionState == ConnectionState.waiting) {
@@ -35,45 +38,56 @@ class _HandChartState extends State<HandChart> {
     return Column(
       children: [
         // Header row
-        Row(
-          children: [
-            Container(width: 30), // Empty corner
-            for (var rank in allRanks)
-              Container(
-                width: 40,
-                height: 30,
-                alignment: Alignment.center,
-                child: Text(
-                  rank.toSymbol(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-          ],
-        ),
-        // Grid
-        for (int row = 0; row < gridSize; row++)
-          Row(
+        Expanded(
+          child: Row(
             children: [
-              // Row label
-              Container(
-                width: 30,
-                height: 40,
-                alignment: Alignment.center,
-                child: Text(
-                  allRanks[row].toSymbol(),
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-              ),
-              // Cells
-              for (int col = 0; col < gridSize; col++)
-                SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: getCell(row, col, appState.pack!.flashcardDeck),
+              // Container(width: 30), // Empty corner
+              Expanded(child: Text('')), // Empty Corner
+              for (var rank in allRanks)
+                Expanded(
+                  child: getHeaderCell(rank.toSymbol()),
                 ),
             ],
           ),
+        ),
+        // Rows
+        for (int row = 0; row < gridSize; row++)
+          Expanded(
+            child: Row(
+              children: [
+                // Row header
+                Expanded(
+                  child: getHeaderCell(allRanks[row].toSymbol()),
+                ),
+                // Cells
+                for (int col = 0; col < gridSize; col++)
+                  Expanded(
+                    child: getCell(row, col, appState.pack!.flashcardDeck),
+                  ),
+              ],
+            ),
+          ),
       ],
+    );
+  }
+
+  Widget getHeaderCell(String s) {
+    return Container(
+      height: double.infinity,
+      decoration: BoxDecoration(
+        border: Border.all(
+          color: Colors.black,
+          style: BorderStyle.solid,
+          width: 1,
+        ),
+      ),
+      child: Center(
+        child: Text(
+          s,
+          style: const TextStyle(fontWeight: FontWeight.bold),
+          textAlign: TextAlign.center,
+        ),
+      ),
     );
   }
 
@@ -98,9 +112,6 @@ class _HandChartState extends State<HandChart> {
     // print(data[hand]);
     var percentages = data.solutions[hand]!;
 
-    return ActionBox(
-      hand: hand,
-      percentages: percentages
-    );
+    return ActionBox(hand: hand, percentages: percentages);
   }
 }

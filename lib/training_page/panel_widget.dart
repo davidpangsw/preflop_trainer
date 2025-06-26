@@ -36,49 +36,53 @@ class PanelWidget extends StatelessWidget {
     var appState = context.watch<MyAppState>();
     final result = appState.flashcardResult;
 
-    // answer widget
-    final Widget answerWidget;
+    // answer text
+    final Text answerText;
     if (result == null) {
-      answerWidget = text('Choose', null);
+      answerText = text('Choose', null);
     } else {
       if (result.isCorrect) {
-        answerWidget = text('Correct!', Colors.green);
+        answerText = text('Correct!', Colors.green);
       } else {
-        answerWidget = Column(
-          children: [
-            text('Wrong!', Colors.red),
-            ElevatedButton(
-              onPressed: () {
-                appState.onNextFlashcard();
-              },
-              child: Text('Next'),
-            ),
-            ActionBox(hand: result.hand, percentages: result.solution),
-          ],
-        );
+        answerText = text('Wrong!', Colors.red);
       }
     }
 
-    final buttons = (result != null && !result.isCorrect)
-        ? []
-        : [
-            Expanded(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(child: _button(appState, PokerAction.raise)),
-                  // Expanded(child: _button(appState, PokerAction.call)),
-                  Expanded(child: _button(appState, PokerAction.fold)),
-                ],
-              ),
+    // answer widget
+    if (result != null && !result.isCorrect) {
+      return Column(
+        children: [
+          answerText,
+          ElevatedButton(
+            onPressed: () {
+              appState.onNextFlashcard();
+            },
+            child: Text('Next'),
+          ),
+          Expanded(
+            child: ActionBox(hand: result.hand, percentages: result.solution),
+          ),
+        ],
+      );
+    } else {
+      return Column(
+        // mainAxisAlignment: MainAxisAlignment.start,
+        // crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          answerText,
+          Expanded(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Expanded(child: _button(appState, PokerAction.raise)),
+                // Expanded(child: _button(appState, PokerAction.call)),
+                Expanded(child: _button(appState, PokerAction.fold)),
+              ],
             ),
-            Expanded(child: _button(appState, null)),
-          ];
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [answerWidget, ...buttons],
-      // children: [],
-    );
+          ),
+          Expanded(child: _button(appState, null)),
+        ],
+      );
+    }
   }
 }

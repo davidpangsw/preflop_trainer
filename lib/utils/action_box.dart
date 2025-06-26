@@ -39,6 +39,8 @@ class ActionBox extends StatelessWidget {
           percentages[PokerAction.fold] ?? 0,
         ],
         colors: [Colors.red, Colors.green, Colors.blue, Colors.blue],
+        width: double.infinity,
+        height: double.infinity,
       ),
     );
   }

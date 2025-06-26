@@ -8,19 +8,21 @@ class SelectTrainingPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Text(appState.pack!.flashcardDeck.settings.position.name.toUpperCase()),
-          HandChart(),
-          SelectTrainingPanel(),
-          // (appState.pack == null)
-          //     ? CircularProgressIndicator()
-          //     : JsonView.string(appState.pack!.toBriefJson()),
-        ],
-      ),
+    if (appState.pack == null) return CircularProgressIndicator();
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      // direction: Axis.vertical ,
+      children: [
+        Text(appState.pack!.flashcardDeck.settings.position.name.toUpperCase()),
+        Expanded(
+          child: Container(padding: EdgeInsets.all(20.0), child: HandChart()),
+        ),
+        SelectTrainingPanel(),
+        // (appState.pack == null)
+        //     ? CircularProgressIndicator()
+        //     : JsonView.string(appState.pack!.toBriefJson()),
+      ],
     );
   }
 }
