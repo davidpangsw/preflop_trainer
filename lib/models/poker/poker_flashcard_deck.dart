@@ -52,13 +52,14 @@ Solution _solutionFromJson(Map<String, dynamic> d) {
   double total = 100.0;
   for (MapEntry<String, dynamic> entry in d.entries) {
     PokerAction action = PokerAction.fromString(entry.key);
+    if (action == PokerAction.fold) continue;
     double p = double.parse(entry.value.toString());
     total = total - p;
     ret[action] = p;
   }
   ret[PokerAction.fold] = total;
-  print(d);
-  print(ret);
+  // print(d);
+  // print(ret);
 
   return ret;
 }
