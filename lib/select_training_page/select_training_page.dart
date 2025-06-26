@@ -14,7 +14,10 @@ class SelectTrainingPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.center,
       // direction: Axis.vertical ,
       children: [
-        Text(appState.pack!.flashcardDeck.settings.position.name.toUpperCase()),
+        Text(
+          appState.pack!.flashcardDeck.settings.position.name.toUpperCase(),
+          style: TextStyle(fontSize: 20.0),
+        ),
         Expanded(
           child: Container(padding: EdgeInsets.all(20.0), child: HandChart()),
         ),
@@ -22,6 +25,9 @@ class SelectTrainingPage extends StatelessWidget {
         // (appState.pack == null)
         //     ? CircularProgressIndicator()
         //     : JsonView.string(appState.pack!.toBriefJson()),
+        Text(
+          '100 Stack, NL50, GTO cashgame, only opening.\nMore situation will be available in the future.\nIf you are want more features, feel free to contact me!',
+        ),
       ],
     );
   }
@@ -41,7 +47,6 @@ class SelectTrainingPanel extends StatelessWidget {
     return Column(
       spacing: 10.0,
       children: [
-        Text('Currently only support 100 Stack, NL50, GTO cashgame. Only opening is supported, but more situation may be available in the future. If you are interested for more features, feel free to contact me!'),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
