@@ -31,12 +31,12 @@ Done
 Done
 
 #### Final test, hot fix, gather next stage requirements
-- Fixing Small blind (Use General rate)
 
 - Next stage:
     - Multiple deck combining
     - Remove all the useless "Fold" keys
     - Capture table from HTTP request
+    - Small blind using General rate
 
 ## Getting Started
 
