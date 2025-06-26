@@ -49,7 +49,7 @@ typedef Solution = Map<PokerAction, double>;
 // and their sum is in [0, 1]
 Solution _solutionFromJson(Map<String, dynamic> d) {
   var ret = <PokerAction, double>{};
-  double total = 1.0;
+  double total = 100.0;
   for (MapEntry<String, dynamic> entry in d.entries) {
     PokerAction action = PokerAction.fromString(entry.key);
     double p = double.parse(entry.value.toString());
@@ -57,6 +57,8 @@ Solution _solutionFromJson(Map<String, dynamic> d) {
     ret[action] = p;
   }
   ret[PokerAction.fold] = total;
+  print(d);
+  print(ret);
 
   return ret;
 }
