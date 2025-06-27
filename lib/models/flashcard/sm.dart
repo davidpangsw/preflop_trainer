@@ -27,7 +27,7 @@ class Sm {
       repetitions++;
     } else {
       repetitions = 0;
-      interval = 0; // 0 or 1, depending on the app or how strict we want
+      interval = 1; // 0 or 1, depending on the app or how strict we want
     }
 
     // calculate ease factor

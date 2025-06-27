@@ -58,7 +58,7 @@ class SmDeck {
 
   Iterable<String> get dueCards {
     return reviewQueue.toList().where(
-      (card) => !cardStates[card]!.dueDate.isAfter(DateTime.now()),
+      (card) => !(cardStates[card]!.dueDate.isAfter(DateTime.now())),
     );
   }
 
@@ -78,6 +78,15 @@ class SmDeck {
   void reduceDue(Duration duration) {
     for (var entry in cardStates.entries) {
       entry.value.dueDate = entry.value.dueDate.subtract(duration);
+    }
+  }
+
+  void resetStates() {
+    for (var key in cardStates.keys) {
+      cardStates[key] = SmCardState(
+        response: SmResponse(interval: 0, repetitions: 0, easeFactor: 2.5),
+        dueDate: DateTime.now(),
+      );
     }
   }
 

@@ -61,6 +61,11 @@ class Pack {
     return result;
   }
 
+  void resetMemory() {
+    _smDeck.resetStates();
+    _smDeck.save();
+  }
+
   static Future<Pack> load(AssetBundle bundle, String packId) async {
     // load decks/deckId
     // load from decks/$deckId.json

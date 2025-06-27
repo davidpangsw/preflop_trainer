@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:preflop_trainer/main.dart';
 import 'package:preflop_trainer/models/poker/poker_state.dart';
 import 'package:preflop_trainer/select_training_page/hand_chart.dart';
+import 'package:preflop_trainer/utils/confirmation_button.dart';
 import 'package:provider/provider.dart';
 
 class SelectTrainingPage extends StatelessWidget {
@@ -9,14 +10,28 @@ class SelectTrainingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     var appState = context.watch<MyAppState>();
     if (appState.pack == null) return CircularProgressIndicator();
+    final pack = appState.pack!;
+    final positionText = pack.flashcardDeck.settings.position.name.toUpperCase();
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.center,
       // direction: Axis.vertical ,
+      spacing: 0,
       children: [
         Text(
-          appState.pack!.flashcardDeck.settings.position.name.toUpperCase(),
+          positionText,
           style: TextStyle(fontSize: 20.0),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: ConfirmationButton(
+            buttonText: Text(
+              'Reset Memory',
+              style: TextStyle(color: Colors.red),
+            ),
+            dialogContent: 'WARNING: This will erase all memory of this deck: $positionText',
+            onConfirm: () => {appState.pack!.resetMemory()},
+          ),
         ),
         Expanded(
           child: Container(padding: EdgeInsets.all(20.0), child: HandChart()),
