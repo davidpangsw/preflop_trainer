@@ -1,35 +1,40 @@
 import 'dart:convert';
 
 import 'package:collection/collection.dart';
-import 'package:flutter/foundation.dart';
 import 'package:preflop_trainer/models/flashcard/sm.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:preflop_trainer/models/flashcard/sm_card_state.dart';
+import 'package:preflop_trainer/utils/io.dart';
 
 // Correspond to a deck of flashcard states
 class SmDeck {
-  final sm = Sm();
+  static final sm = Sm();
 
   final String id;
-  final List<String> deck;
+  Iterable<String> get deck => cardStates.keys;
   final Map<String, SmCardState> cardStates;
-  final HeapPriorityQueue<String> reviewQueue;
+  final HeapPriorityQueue<String>
+  reviewQueue; // WARNING: top card may not be of earliest due date
 
-  SmDeck({required this.id, required this.deck, required this.cardStates})
+  SmDeck({required this.id, required this.cardStates})
     : reviewQueue = HeapPriorityQueue<String>((a, b) {
-        final r1 = cardStates[a]!.response;
-        final r2 = cardStates[b]!.response;
+        final c1 = cardStates[a]!;
+        final c2 = cardStates[b]!;
         // print("Comparing: $r1, $r2");
 
-        var diff = r1.interval.compareTo(r2.interval);
-        // print("Diff: $diff");
-        if (diff != 0) return diff;
+        final d1 = c1.dueDate;
+        final d2 = c2.dueDate;
+        final diffDays = d1.difference(d2).inDays;
+        // print("Diff in days: $diffDays");
+        if (diffDays.abs() >= 1) return diffDays;
 
-        diff = r1.repetitions.compareTo(r2.repetitions);
+        final r1 = c1.response;
+        final r2 = c2.response;
+        final diff = r1.repetitions.compareTo(r2.repetitions);
         if (diff != 0) return diff;
 
         // the larger, the earlier
         return r2.easeFactor.compareTo(r1.easeFactor);
-      })..addAll(deck);
+      })..addAll(cardStates.keys.shuffled());
 
   factory SmDeck.withDefaultCardStates({
     required id,
@@ -43,29 +48,29 @@ class SmDeck {
         ),
     };
 
-    deck.shuffle(); // shuffle the deck to give random start
-
-    return SmDeck(id: id, deck: deck, cardStates: cardStates);
+    return SmDeck(id: id, cardStates: cardStates);
   }
 
-  // Peeks at the top card ID in the reviewQueue without removing it
   String? get topCard {
     if (reviewQueue.isEmpty) {
       return null; // Return null if the queue is empty
     }
-    return reviewQueue.first; // Returns the top element (smallest interval)
+    return reviewQueue.first;
   }
 
   Iterable<String> get dueCards {
-    return reviewQueue.toList().where(
+    return deck.where(
       (card) => !(cardStates[card]!.dueDate.isAfter(DateTime.now())),
     );
   }
 
   DateTime? get nextDue {
-    final top = topCard;
-    if (top == null) return null;
-    return cardStates[top]!.dueDate;
+    if (cardStates.isEmpty) return null;
+    return cardStates.values
+        .reduce(
+          (accum, x) => accum.dueDate.compareTo(x.dueDate) < 0 ? accum : x,
+        )
+        .dueDate;
   }
 
   // only for top card (least interval)
@@ -88,12 +93,15 @@ class SmDeck {
         dueDate: DateTime.now(),
       );
     }
+
+    // reset reviewQueue
+    reviewQueue.clear();
+    reviewQueue.addAll(cardStates.keys.shuffled());
   }
 
   String toBriefJson(int i) {
     final Map<String, dynamic> jsonMap = {
       'id': id,
-      // 'deck': deck,
       'cardStates': {
         for (var entry in cardStates.entries.toList().sublist(0, i))
           entry.key: {
@@ -108,7 +116,6 @@ class SmDeck {
   String toJson() {
     final Map<String, dynamic> jsonMap = {
       'id': id,
-      'deck': deck,
       'cardStates': {
         for (var entry in cardStates.entries)
           entry.key: {
@@ -120,30 +127,26 @@ class SmDeck {
     return jsonEncode(jsonMap);
   }
 
-  factory SmDeck.fromJson(String json) {
-    final jsonMap = jsonDecode(json);
-    final id = jsonMap['id'] as String;
-    final deck = List<String>.from(jsonMap['deck']);
+  factory SmDeck.fromJson(Map<String, dynamic> json) {
+    final id = json['id'] as String;
+    // final deck = List<String>.from(jsonMap['deck']);
     final cardStates = {
-      for (var entry in (jsonMap['cardStates'] as Map<String, dynamic>).entries)
+      for (var entry in (json['cardStates'] as Map<String, dynamic>).entries)
         entry.key: SmCardState(
           response: SmResponse.fromJsonString(entry.value['response']),
           dueDate: DateTime.parse(entry.value['dueDate']),
         ),
     };
-    return SmDeck(id: id, deck: deck, cardStates: cardStates);
+    return SmDeck(id: id, cardStates: cardStates);
   }
 
   Future<void> save() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setString(id, toJson());
+    await MyIO.save(id, toJson());
   }
 
   static Future<SmDeck?> load(String id) async {
-    final prefs = await SharedPreferences.getInstance();
-    final json = prefs.getString(id);
+    final json = await MyIO.loadJson(id);
     if (json == null) return null;
-
     return SmDeck.fromJson(json);
   }
 
@@ -154,54 +157,5 @@ class SmDeck {
       await smDeck.save();
     }
     return smDeck;
-  }
-}
-
-class SmCardState {
-  static final sm = Sm();
-
-  SmResponse response;
-  DateTime dueDate;
-
-  SmCardState({required this.response, required this.dueDate});
-
-  // only for top card (least interval)
-  void acceptResponse(SmResponseQuality quality) {
-    // print(response.repetitions);
-    // print(response.repetitions+1);
-    response = sm.calc(
-      quality: quality,
-      repetitions: response.repetitions,
-      previousInterval: response.interval,
-      previousEaseFactor: response.easeFactor,
-    );
-    // print(response.repetitions);
-
-    dueDate = dueDate.add(Duration(days: response.interval));
-  }
-
-  String toJson() {
-    final Map<String, dynamic> jsonMap = {
-      'response': {
-        'interval': response.interval,
-        'repetitions': response.repetitions,
-        'easeFactor': response.easeFactor,
-      },
-      'dueDate': dueDate.toIso8601String(),
-    };
-    return jsonEncode(jsonMap);
-  }
-
-  factory SmCardState.fromJson(Map<String, dynamic> json) {
-    final response = SmResponse.fromJson(
-      json['response'] as Map<String, dynamic>,
-    );
-    final dueDate = DateTime.parse(json['dueDate']);
-    return SmCardState(response: response, dueDate: dueDate);
-  }
-
-  @override
-  String toString() {
-    return 'SmCardState{response: $response, dueDate: $dueDate}';
   }
 }

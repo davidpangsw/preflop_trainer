@@ -3,8 +3,8 @@ import 'package:preflop_trainer/homepage.dart';
 import 'package:preflop_trainer/models/pack.dart';
 import 'package:preflop_trainer/models/poker/poker_flashcard_deck.dart';
 import 'package:preflop_trainer/models/poker/poker_state.dart';
+import 'package:preflop_trainer/utils/io.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(const MyApp());
@@ -40,29 +40,13 @@ class MyAppState extends ChangeNotifier {
 
   void _init(BuildContext context) async {
     final bundle = DefaultAssetBundle.of(context);
-    final packId = await loadPackId();
+    final packId = await MyIO.loadOrNew('packId', "open/${PokerPosition.utg.name}");
     await loadPack(bundle, packId);
-  }
-
-  static Future<String> loadPackId() async {
-    const String key = 'packId';
-    final prefs = await SharedPreferences.getInstance();
-    if (prefs.getString(key) == null) {
-      prefs.setString(key, "open/${PokerPosition.utg.name}");
-    }
-
-    return prefs.getString(key)!;
-  }
-
-  void savePackId(String packId) async {
-    const String key = 'packId';
-    final prefs = await SharedPreferences.getInstance();
-    prefs.setString(key, packId);
   }
 
   Future<void> loadPack(AssetBundle bundle, String packId) async {
     pack = await Pack.load(bundle, packId);
-    flashcardQuestion = pack!.nextQuestion();
+    _nextFlashcard();
     notifyListeners();
   }
 
@@ -82,9 +66,7 @@ class MyAppState extends ChangeNotifier {
 
   void onNextFlashcard() {
     if (pack == null) return;
-    flashcardResult = null; // clear previous result
-    flashcardQuestion = pack!.nextQuestion();
-
+    _nextFlashcard();
     notifyListeners();
   }
 
@@ -101,7 +83,19 @@ class MyAppState extends ChangeNotifier {
   void onSelectPosition(BuildContext context, PokerPosition position) {
     final bundle = DefaultAssetBundle.of(context);
     final packId = "open/${position.name}";
-    savePackId(packId);
+    MyIO.save('packId', packId);
     loadPack(bundle, packId);
+  }
+
+  void onResetPackMemory() async {
+    if (pack == null) return;
+    await pack!.resetMemory();
+    _nextFlashcard();
+    notifyListeners();
+  }
+
+  void _nextFlashcard() {
+    flashcardResult = null; // clear previous result
+    flashcardQuestion = pack!.nextQuestion(); // next question
   }
 }

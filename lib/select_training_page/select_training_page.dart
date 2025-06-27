@@ -30,7 +30,7 @@ class SelectTrainingPage extends StatelessWidget {
               style: TextStyle(color: Colors.red),
             ),
             dialogContent: 'WARNING: This will erase all memory of this deck: $positionText',
-            onConfirm: () => {appState.pack!.resetMemory()},
+            onConfirm: () => {appState.onResetPackMemory()},
           ),
         ),
         Expanded(

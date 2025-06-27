@@ -17,6 +17,13 @@ class TrainingPage extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
           Text('Next Due Card at $nextDue'),
+          // ConfirmationButton(
+          //   buttonText: Text('Reduce 1 day'),
+          //   dialogContent: 'This may interrupt your learning. Are you sure?',
+          //   onConfirm: () {
+          //     appState.onReduceDue(Duration(days: 1));
+          //   },
+          // ),
           ElevatedButton(
             onPressed: () {
               appState.onReduceDue(Duration(days: 1));

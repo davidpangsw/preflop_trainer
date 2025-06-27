@@ -61,9 +61,9 @@ class Pack {
     return result;
   }
 
-  void resetMemory() {
+  Future<void> resetMemory() async {
     _smDeck.resetStates();
-    _smDeck.save();
+    await _smDeck.save();
   }
 
   static Future<Pack> load(AssetBundle bundle, String packId) async {
